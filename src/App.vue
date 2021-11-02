@@ -1,26 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="login-page">
+    <nav-bar></nav-bar>
+    <login-form ></login-form>
+    <v-footer :is-bottom="true"></v-footer>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import LoginForm from "./components/loginform/index.vue";
+import VFooter from "./components/footer/index.vue";
+import NavBar from './components/navbar/index.vue'
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    LoginForm, VFooter, NavBar
+  },
+  methods: {
+    
   }
-}
+};
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  @import "./assets/styles/index.scss";
+  body{
+    background-color:white;
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    padding: 0;
+  }
 </style>

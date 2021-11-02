@@ -1,0 +1,38 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: 1px solid gray;
+    max-width: 400px;
+    // justify-content: flex-start;
+    align-items: flex-start;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.form__text{
+    margin-top: 0.5rem;
+    color: black;
+    font-weight: 700;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.form__input{
+    margin-top: 1rem;
+    width: 90%;
+    border-radius: 2px;
+    border: 1px solid gray;
+    font-size: 1.2rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.form-holder{
+    margin-top: 3rem;
+    display: flex;
+    text-align: center; 
+    justify-content: center;
+}
+
+.form__button{
+    margin-top: 1rem;
+}
