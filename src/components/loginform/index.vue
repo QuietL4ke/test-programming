@@ -20,18 +20,14 @@ export default {
   methods: {
       onSubmit(){
         if(this.userName==''){
-          alert('Введите имя пользователя');
+          alert('Введите имя пользователя'); 
           return;
         }else if(this.password==''){
           alert('Введите пароль');
           return;
         }
-        let userInfo = {
-          userName: this.userName,
-          password: this.password
-        }
-        this.$emit('login-submit', userInfo)
         //запрос на сервер
+        if(this.userName =='Pupok' && this.password === '123') this.$router.replace('/index');
     },
       reset(){
         this.password = '';
