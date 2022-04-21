@@ -1,7 +1,7 @@
 <template>
     <div>
         <navbar/>
-        <slot class=""/>
+        <slot/>
         <v-footer :isBottom="isBottom"/>
     </div>
 </template>
