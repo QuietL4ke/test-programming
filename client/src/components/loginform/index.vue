@@ -1,6 +1,6 @@
 <template>
 <div class="form-holder">
-    <form class="form" @submit.prevent="onSubmit">
+    <form class="form" @submit.prevent="onSubmit" method="post">
       <label class="form__text" for="userName">Имя пользователя</label>
       <input class="form__input" id="userName" v-model="userName" type="text">
       <label class="form__text" for="password">Пароль</label>
@@ -26,7 +26,6 @@ export default {
           alert('Введите пароль');
           return;
         }
-        //запрос на сервер
         if(this.userName =='Pupok' && this.password === '123') this.$router.replace('/index');
     },
       reset(){
