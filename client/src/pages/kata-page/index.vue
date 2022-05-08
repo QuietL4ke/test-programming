@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <default-layout :isBottom="false">
       <div class="w-100 d-flex flex-column align-items-center">
         <h2 class="w-50 text-center">{{ name }}</h2>
@@ -11,22 +11,22 @@
         <h3 class="data-example mx-4">Выходные данные</h3>
         <h5 class="description">{{ outputData }}</h5>
       </div>
-      <div class="d-flex justify-content-center mt-3">
-        <div class="w-75">
-         <code-area :isCode="true"/>
+      <div class="d-flex flex-column align-items-center">
+        <div class="d-flex justify-content-center w-100 mt-3">
+          <div class="w-75">
+            <code-area ref="codearea" :isCode="true" v-model="code" />
+          </div>
         </div>
+        <button class="button  mt-4" @click="testKata" >Тестировать</button>
       </div>
     </default-layout>
   </div>
 </template>
 
-
-
 <script>
-import CodeArea from '@/components/codearea/index.vue';
+import CodeArea from "@/components/codearea/index.vue";
 import DefaultLayout from "@/layouts/defaultLayout.vue";
-import axios from 'axios';
-
+import axios from "axios";
 
 export default {
   data() {
@@ -36,24 +36,31 @@ export default {
       description: "Объяснение: что нужно сделать в задаче",
       inputData: "Пример входных данных",
       outputData: "Пример выходных данных",
-      code: "function(){\n}"
+      code: "function testKata(){\n}",
     };
   },
   components: {
-    DefaultLayout, CodeArea
+    DefaultLayout,
+    CodeArea,
   },
   mounted() {
     this.id = this.$route.params.id;
-    axios
-      .get('http://localhost:5000/katas/' + this.id)
-      .then(response => {
-        console.log(response)
-        this.name = response.data.name;
-        this.description = response.data.description;
-        this.inputData = response.data.inputData;
-        this.outputData = response.data.outputData;
-        
-      });
+    let token = localStorage.getItem('token')
+    let header = null;
+    if( token ) header = {headers:{authorization: `Bearer ${token}`}}
+    axios.get("http://localhost:5000/katas/" + this.id, header).then((response) => {
+      this.name = response.data.name;
+      this.description = response.data.description;
+      this.inputData = response.data.inputData;
+      this.outputData = response.data.outputData;
+    }, () =>{
+      this.$router.replace('/login')
+    });
+  },
+  methods: {
+    testKata(){
+      console.log(this.$refs.codearea.code)
+    }
   },
 };
 </script>

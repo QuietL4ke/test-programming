@@ -19,8 +19,11 @@ export default {
     };
   },
   mounted() {
+    let token = localStorage.getItem('token')
+    let header = null;
+    if( token ) header = {headers:{authorization: `Bearer ${token}`}}
     axios
-      .get('http://localhost:5000/katas')
+      .get('http://localhost:5000/katas', header)
       .then(response =>{
         this.kataList = [];
         let datalist = response.data;
@@ -38,9 +41,9 @@ export default {
             }
           )
         });
-        console.log(this.kataList)
-      })
-      .catch(error => console.log(error));
+      }, () =>{
+      this.$router.replace('/login')
+    })
   }
 };
 </script>

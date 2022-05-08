@@ -10,6 +10,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -26,7 +27,20 @@ export default {
           alert('Введите пароль');
           return;
         }
-        if(this.userName =='Pupok' && this.password === '123') this.$router.replace('/index');
+        axios.post('http://localhost:5000/',{
+          login: this.userName,
+          password: this.password
+        }).then(response => {
+              localStorage.setItem('token', response.data.token);
+              localStorage.setItem('id', response.data.id);
+              localStorage.setItem('username', response.data.username)
+              this.$router.replace('/');
+          }, (response) => {
+            alert("Wrong username or password!")
+            this.password = "";
+            return;
+        })
+        
     },
       reset(){
         this.password = '';

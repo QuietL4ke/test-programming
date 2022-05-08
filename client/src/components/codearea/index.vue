@@ -1,6 +1,9 @@
 <template>
   <div>
-    <textarea :id="id" v-model="kataText"></textarea>
+    <textarea
+      :id="id"
+      v-model="code"
+    ></textarea>
   </div>
 </template>
 <script>
@@ -10,6 +13,10 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material-darker.css";
 
 export default {
+  model: {
+    prop: "kataText",
+    event: "changeCode",
+  },
   props: {
     kataText: {
       default: "function(){\n}",
@@ -23,11 +30,18 @@ export default {
   data() {
     return {
       id: undefined,
+      code: this.kataText
+    };
+  },
+  methods: {
+    updateCode(ev) {
+      let value = ev.target.value;
+      this.$emit('changeCode', value)
     }
   },
-    created() {
-      this.isCode ? this.id = "code" : this. id = "test";
-    },
+  created() {
+    this.isCode ? (this.id = "code") : (this.id = "test");
+  },
 
   mounted() {
     CodeMirror.fromTextArea(document.getElementById(this.id), {

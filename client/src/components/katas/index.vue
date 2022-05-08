@@ -7,7 +7,6 @@
 </template>
 <script>
 import Kata from '@/components/kata/index.vue'
-import axios from 'axios'
 export default {
     props :{
         katas:{
