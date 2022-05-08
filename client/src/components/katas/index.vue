@@ -7,7 +7,6 @@
 </template>
 <script>
 import Kata from '@/components/kata/index.vue'
-
 export default {
     props :{
         katas:{
@@ -17,7 +16,7 @@ export default {
     },
     components :{
         Kata
-    }
+    },
 }
 </script>
 <style lang="scss" scope>

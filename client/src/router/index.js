@@ -5,13 +5,13 @@ import KataPage from '@/pages/kata-page/index.vue'
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: '/login',
+    name: 'Login',
     component: LoginPage
   },
   {
-    path:'/index',
-    name: 'Index',
+    path:'/',
+    name: 'Home',
     component: IndexPage
   },
   {
