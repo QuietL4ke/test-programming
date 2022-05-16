@@ -1,27 +1,32 @@
 const express = require('express');
-const app = express();
 const path = require('path');
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const port = process.env.PORT || 5000;
 const argon2 = require('argon2')
-const { sequelize, Task, User } = require('./scripts/DB.js');
+const { prepareCode, testCode } = require('./scripts/codeService')
+const { User, Task, Test, Argument } = require('./scripts/initDataBase.js');
 const e = require('express');
+require('./scripts/DB.js')
 
 const header = {
   'Access-Control-Allow-Origin': '*',
 }
 
+const app = express();
 app.use(cors({
   origin: 'http://localhost:8080'
 }));
+app.listen(port, () => {
+  console.log(`Server is running on: http://localhost:${port}`);
+});
 
 const tokenKey = '1a2b-3c4d-5e6f-7g8h'
 
 app.use(express.json())
 app.use(async (req, res, next) => {
   if (req.headers.authorization) {
-    await jwt.verify(
+    jwt.verify(
       req.headers.authorization.split(' ')[1],
       tokenKey,
       async (err, payload) => {
@@ -35,14 +40,14 @@ app.use(async (req, res, next) => {
         }
       }
     )
-  } else{
+  } else {
     next();
   }
 })
 
 
 app.get('/katas', async (req, res) => {
-  if (!req.user){
+  if (!req.user) {
     return res.status(401).json({ message: 'Not authorized' })
   }
   let tasks = await Task.findAll();
@@ -53,8 +58,27 @@ app.get('/katas/:id', async (req, res) => {
   if (!req.user)
     return res.status(401).json({ message: 'Not authorized' })
   let task = await Task.findByPk(req.params.id);
-  if(!task) return res.header(header).status(404) //.then(
+  if (!task) return res.header(header).status(404) //.then(
   res.header(header).status(200).send(task.dataValues);
+})
+
+app.post('/katas/:id', async (req, res) => {
+  if (!req.user)
+    return res.status(401).json({ message: 'Not authorized' })
+  let code = req.body.code;
+  let task = await Task.findByPk(req.params.id);
+  if (!task) return res.header(header).status(404)
+  let result = await testCode(code, req.params.id, User, Test, Argument)
+  switch (result) {
+    case 0:
+      console.log('All tests are passed')
+      break;
+    case -1:
+      console.log('Problems with DB')
+      break;
+    default:
+      console.log(result);
+  }
 })
 
 app.post('/', async (req, res) => {
@@ -77,6 +101,3 @@ app.post('/', async (req, res) => {
   return res.status(404).json({ message: 'User not found or password is invalid' })
 })
 
-app.listen(port, () => {
-  console.log(`Server is running on: http://localhost:${port}`);
-});

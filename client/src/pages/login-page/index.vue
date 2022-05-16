@@ -13,10 +13,6 @@ export default {
   components: {
     LoginForm, DefaultLayout
   },
-  methods: {
-   
-    DefaultLayout 
-  }
 };
 </script>
 <style lang="scss" scope>
