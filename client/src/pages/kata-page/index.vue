@@ -14,17 +14,28 @@
       <div class="d-flex flex-column align-items-center">
         <div class="d-flex justify-content-center w-100 mt-3">
           <div class="w-75">
-            <code-area ref="codearea" :isCode="true" v-model="code" />
+            <Codemirror
+              :value="code"
+              :options="cmOptions"
+              border
+              placeholder="test placeholder"
+              :height="300"
+              @change="change"
+            />
+            <!-- <code-area ref="codearea" :isCode="true" v-model="code" /> -->
           </div>
         </div>
-        <button class="button  mt-4" @click="testKata" >Тестировать</button>
+        <button class="button mt-4" @click="testKata">Тестировать</button>
       </div>
     </default-layout>
   </div>
 </template>
 
 <script>
-import CodeArea from "@/components/codearea/index.vue";
+import Codemirror from "codemirror-editor-vue3";
+import "codemirror/mode/javascript/javascript.js";
+import "codemirror/theme/dracula.css";
+// import CodeArea from "@/components/codearea/index.vue";
 import DefaultLayout from "@/layouts/defaultLayout.vue";
 import axios from "axios";
 
@@ -37,29 +48,54 @@ export default {
       inputData: "Пример входных данных",
       outputData: "Пример выходных данных",
       code: "function testKata(){\n}",
+       cmOptions: {
+        mode: "text/javascript", // Language mode
+        theme: "dracula", // Theme
+        lineNumbers: true, // Show line number
+        smartIndent: true, // Smart indent
+        indentUnit: 2, // The smart indent unit is 2 spaces in length
+        foldGutter: true, // Code folding
+        styleActiveLine: true, // Display the style of the selected row
+      },
     };
   },
   components: {
     DefaultLayout,
-    CodeArea,
+    Codemirror
   },
   mounted() {
     this.id = this.$route.params.id;
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem("token");
     let header = null;
-    if( token ) header = {headers:{authorization: `Bearer ${token}`}}
-    axios.get("http://localhost:5000/katas/" + this.id, header).then((response) => {
-      this.name = response.data.name;
-      this.description = response.data.description;
-      this.inputData = response.data.inputData;
-      this.outputData = response.data.outputData;
-    }, () =>{
-      this.$router.replace('/login')
-    });
+    if (token) header = { headers: { authorization: `Bearer ${token}` } };
+    axios.get("http://localhost:5000/katas/" + this.id, header).then(
+      (response) => {
+        this.name = response.data.name;
+        this.description = response.data.description;
+        this.inputData = response.data.inputData;
+        this.outputData = response.data.outputData;
+      },
+      () => {
+        this.$router.replace("/login");
+      }
+    );
   },
   methods: {
-    testKata(){
-      console.log(this.$refs.codearea.code)
+    testKata() {
+    let token = localStorage.getItem("token");
+    let header = null;
+    if (token) header = { headers: { authorization: `Bearer ${token}`}};
+      axios.post('http://localhost:5000/katas/' + this.id, {code:this.code}, header).then(
+        res => {
+          
+        }, (err) =>{
+          console.log(err);
+
+        }
+      )
+    },
+    change(code){
+      this.code = code
     }
   },
 };

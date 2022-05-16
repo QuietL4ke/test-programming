@@ -16,7 +16,7 @@
 export default { 
   data() {
     return {
-      siteName: "Тести задачи!",
+      siteName: "Тестируй задачи",
       username: "",
       authorizated: false,
       authorizationInfo: "Выйти из аккаунта..."
